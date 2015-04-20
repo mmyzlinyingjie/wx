@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>所有多表操作sql,key名称不能变</comment>
+
+<entry key="newVideo">
+select * from news where (title like '%' ? '%' or description like '%' ? '%'  or actor like '%' ? '%') and type = 4;
+</entry>
+
+<entry key="image">
+select * from image where description like '%' ? '%' or actor like '%' ? '%';
+</entry>
+
+<entry key="voice">
+select * from voice where description like '%' ? '%';
+</entry>
+
+<entry key="voiceEgg">
+select description from voice;
+</entry>
+
+<entry key="imageEgg">
+select description from image;
+</entry>
+
+<entry key="newsEgg">
+select description from news where type = 4;
+</entry>
+
+</properties>

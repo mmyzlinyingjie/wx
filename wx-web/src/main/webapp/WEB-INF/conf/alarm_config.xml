@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+<entry key="svr_name_prefix">WEB.IDOL</entry>
+<!-- limit,interval(毫秒)策略名 -->
+<entry key="alarm_list">
+6,300000<!--未标记的策略名，5分钟内发生6次会报警-->
+1,20000,NETWORK<!--WEB.IDOL.NETWORK，20秒内发生10次会报警-->
+10,20000,VIDEO_TIMEOUT<!--WEB.IDOL.VIDEO_TIMEOUT，20秒内发生10次会报警-->
+</entry>
+
+<!-- ent porxy列表 -->
+<!-- 121.9.240.12:5900 (test) -->
+<entry key="entProxy">
+183.136.136.25:3770
+</entry>
+
+</properties>

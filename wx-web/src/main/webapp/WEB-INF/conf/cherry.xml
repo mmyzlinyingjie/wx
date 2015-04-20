@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cherry>
+    <paths>
+        <path id="cherrice" value="cherrice.xml"></path>
+        <path id="external" value="external.xml"></path>
+        <path id="cherroot" value="cherroot.xml"></path>
+        <path id="error-code" value="errors.properties"></path>
+        <!-- 错误码定义文件 -->
+        <path id="cp-config" value="redis.properties"></path>
+        <path id="daemon" value="daemon.properties"></path>
+        <path id="redisEnv-config" value="redisEnv.xml"></path>
+        <!-- RedisEnv 配置文件 -->
+        <path id="udb" value="udb.properties"></path>
+        <path id="ip-white-list" value="ipWhiteList.xml"></path>
+        <path id="alarm-config" value="alarm_config.xml"></path><!-- 报警配置文件 -->
+        <path id="sql" value="sql/sql.xml"></path>
+    </paths>
+    <ioc>
+        <packages>
+            <package>com.yy.ent.wx.service.*</package>
+        </packages>
+
+        <beans>
+            <!-- 初使化db相关类 -->
+            <!-- daemon  start -->
+            <bean id="daemonClientService" class="com.yy.ent.external.service.DaemonClientService">
+                <method name="DaemonClientService">
+                    <param ref="{daemon}"></param>
+                </method>
+            </bean>
+            
+             <bean id="multiDao" class="com.yy.ent.wx.dao.MultiDao">
+                <method name="MultiDao">
+                    <param ref="{sql}"></param>
+                </method>
+            </bean>
+
+            <!-- external 相关类管理 start -->
+            <bean id="webdbHalbService" class="com.yy.ent.external.service.WebdbHalbService">
+                <method name="init">
+                    <param value="DEFAULT" type="com.yy.ent.commons.halbproxy.HALBProxy$Strategy"></param>
+                    <param value="600000" type="long"></param>
+                    <param ref="{external}"></param>
+                    <param value="20" type="int"></param>
+                </method>
+            </bean>
+
+            <bean id="entProxyHalbService" class="com.yy.ent.external.service.EntProxyHalbService">
+                <method name="init">
+                    <param value="DEFAULT" type="com.yy.ent.commons.halbproxy.HALBProxy$Strategy"></param>
+                    <param value="600000" type="long"></param>
+                    <param ref="{external}"></param>
+                    <param value="50" type="int"></param>
+                </method>
+            </bean>
+
+            <!-- db start-->
+            <bean id="dbEnv" class="com.yy.ent.cherroot.core.datasource.base.DBEnvImpl">
+                <method name="loadConfig">
+                    <param ref="{cherroot}"></param>
+                </method>
+            </bean>
+
+            <bean id="udbEnv" class="com.yy.ent.wx.common.util.UdbEnv">
+                <method name="init">
+                    <param ref="{udb}"></param>
+                </method>
+            </bean>
+
+            <bean id="yyGenericDao" class="com.yy.ent.cherroot.ext.YYGenericDaoImpl">
+                <method name="YYGenericDaoImpl">
+                    <param ref="{dbEnv}" type="com.yy.ent.cherroot.core.datasource.DBEnv"></param>
+                </method>
+            </bean>
+            <!-- db end -->
+
+            <!--new redis start-->
+            <bean id="redisCCache" class="com.yy.ent.clients.cache.redis.RedisCCache">
+                <method name="init">
+                    <param ref="{cp-config}"></param>
+                    <param value="false" type="boolean"></param>
+                </method>
+            </bean>
+
+            <!--  初使化MessageMap类 -->
+            <bean id="errorCodes" class="com.yy.ent.wx.exception.MessageMapper">
+                <method name="MessageMapper">
+                    <param ref="{error-code}"></param>
+                </method>
+            </bean>
+            <!--  初使化MessageMap类 -->
+            <!-- 初使化cache 相关 -->
+            <bean id="redisEnv" class="com.yy.ent.commons.base.cache.RedisEnv">
+                <method name="init">
+                    <param ref="{redisEnv-config}"></param>
+                    <param value="false" type="boolean"></param>
+                </method>
+            </bean>
+            <!-- 初使化权限相关类 -->
+            <bean id="authorizationService" class="com.yy.ent.wx.service.AuthorizationService">
+                <method name="init">
+                    <param ref="{ip-white-list}"></param>
+                </method>
+            </bean>
+            <bean id="commonMonitorService" class="com.yy.ent.clients.monitor.service.CommonMonitorService">
+                <method name="CommonMonitorService">
+                    <param ref="{alarm-config}"></param>
+                </method>
+            </bean>
+        </beans>
+    </ioc>
+</cherry>

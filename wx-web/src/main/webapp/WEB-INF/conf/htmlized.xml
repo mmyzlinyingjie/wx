@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<htmlized>
+
+    <description>htmlized main</description>
+
+    <config>
+        <description>htmlized config</description>
+        <thread core="5" max="10"/>
+        <path>D:/workspace/web/dev/trunk/src/demo/demo-web/src/main/webapp/static</path>
+        <domain>http://localhost:8080/</domain>
+        <timeout>10000</timeout>
+    </config>
+
+    <schedule delay="60" period="120" stop="false" name="search-schedule">
+        <description>search page create</description>
+        <do from="/demo/querySignUp.action?uid=123" to="index.html" name="index" description="index page"/>
+    </schedule>
+
+</htmlized>

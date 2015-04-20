@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <!-- bbs服务器ip -->
+    <entry key="pc">
+        121.9.240.12
+        127.0.0.1
+    </entry>
+
+    <entry key="mobile">
+    </entry>
+
+</properties>

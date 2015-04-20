@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cherrice>
+    <action-package>
+        <package>com.yy.ent.wx.action</package>
+    </action-package>
+
+    <interceptors>
+        <interceptor id="ExceptionInterceptor" class="com.yy.ent.wx.interceptor.ExceptionInterceptor"
+                     auto-match="public *(*)"></interceptor>
+        <interceptor id="AuthInterceptor" class="com.yy.ent.wx.interceptor.AuthInterceptor" ></interceptor>
+        <interceptor id="RemoteLoginInterceptor" class="com.yy.ent.wx.interceptor.RemoteLoginInterceptor"></interceptor>
+        <interceptor id="UploadInterceptor" class="com.yy.ent.wx.interceptor.UploadInterceptor"></interceptor>
+    </interceptors>
+
+    <namespaces>
+        <!--按包分配命名空间，多个匹配项时，采用目录级别对多的-->
+        <namespace name="/wx/" packages="com.yy.ent.wx.action"></namespace>
+        <namespace name="/wx/" packages="com.yy.ent.wx.action.udb"></namespace>
+    </namespaces>
+</cherrice>
+
+        <!--
+        关于拦截器的匹配流程：
+        1.用户用的拦截器【都要】在配置文件中通过interceptor标签实例化。
+        2.interceptor标签本身有全局匹配的正则表达式属性可用于匹配，但用户方法级别上也可以自行组装（@Interceptor注解），也可以两种结合着使用。
+        3.当结合使用的时候，配置文件的拦截器会优先执行，然后再进入方法指定的拦截器。
+        4.ActionDispatcher初始化的时候，会使用混合使用的模式，对每个action和对应的拦截器栈建立关联。
+
+        关于命名空间的匹配流程：
+        1.每个action都有自己的命名空间，当请求到达ActionDispatcher时，会根据命名空间和action名进行匹配，进而进入action的处理流程。
+        2.action的命名空间有两种配置方式，第一种是在配置文件中通过包的方式批量指定，第二种是在方法名上通过@Namespace注解指定
+        3.当ActionDispatcher初始化的时候，会使用混合使用的模式，对每个action的方法进行扫描，并提取@Namespace注解，当没有注解的时候，会使用配置文件中的空间集合，进行最长匹配。
+        -->
