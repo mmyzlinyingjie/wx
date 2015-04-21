@@ -6,28 +6,24 @@
 	<title>1931</title>
 	<meta name="viewport"
 	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-
-	<link rel="stylesheet" type="text/css" href="../../wx/static/css/index.css">
+	<link rel="stylesheet" type="text/css" href="../../wx/static/css/intro.css">
 	<link rel="stylesheet" type="text/css" href="../../wx/static/css/swiper3.06.min.css">
 	<link rel="stylesheet" type="text/css" href="../../wx/static/css/animate.min.css">
 </head>
 <body>
 	<div style="max-width:640px; margin:0 auto;">
 		<a id="music" class="music play" >
-			<audio id="audio" auotplay="true" src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3" loop="" autoplay="" data-src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3"></audio>
+			<audio id="audio"  src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3" loop="" autoplay data-src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3"></audio>
 		</a>
-
-
 		<div class="swiper-container">
 			<div class="swiper-wrapper" id="swiperWrapper">
-
 				<div class="swiper-slide slide-1" id="slide-0">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="bounceInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							闫 莉(女王)
 						</h3>
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.8s">
-                        年轻的fighting，<br/><br/><strong class="ani" swiper-animate-effect="swing" swiper-animate-duration="0.5s" swiper-animate-delay="1.4s">绝不喊停</strong>
+							年轻的fighting，<br/><br/><strong class="ani" swiper-animate-effect="swing" swiper-animate-duration="0.5s" swiper-animate-delay="1.4s">绝不喊停</strong>
 						</p>
 						
 					</div>
@@ -43,7 +39,7 @@
 							陈怡凡(兜兜)
 						</h3>
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="1.2s">
-                        我站的地方<br/><br/>就是<strong class="ani" swiper-animate-effect="rubberBand" swiper-animate-duration="0.8s" swiper-animate-delay="1.7s">舞台</strong>
+							我站的地方<br/><br/>就是<strong class="ani" swiper-animate-effect="rubberBand" swiper-animate-duration="0.8s" swiper-animate-delay="1.7s">舞台</strong>
 						</p>
 					</div>
 					<div class="link-box">
@@ -51,13 +47,13 @@
 						<a href="http://weibo.com/u/5224033947" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-3" id="slide-2">
+				<div class="swiper-slide" id="slide-2">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="bounceInDown" swiper-animate-duration="0.9s" swiper-animate-delay="0.3s">
 							宫冬雪(太阳)
 						</h3>
 						<p class="ani text" swiper-animate-effect="zoomInRight" swiper-animate-duration="0.5s" swiper-animate-delay="1.2s">
-                        把<strong class="ani" swiper-animate-effect="tada" swiper-animate-duration="0.8s" swiper-animate-delay="1.7s">未来</strong>剪成<br/><br/>我要的模样
+							把<strong class="ani" swiper-animate-effect="tada" swiper-animate-duration="0.8s" swiper-animate-delay="1.7s">未来</strong>剪成<br/><br/>我要的模样
 						</p>
 					</div>
 
@@ -66,13 +62,13 @@
 						<a href="http://weibo.com/u/5223403679" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-4" id="slide-3">
+				<div class="swiper-slide" id="slide-3">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="rubberBand" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							魏雨欣(球球)
 						</h3>
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.7s" swiper-animate-delay="0.9s">
-                        <strong class="ani" swiper-animate-effect="flipInY" swiper-animate-duration="0.4s" swiper-animate-delay="1.6s">勇气</strong><br/><br/>在手心，在心底
+							<strong class="ani" swiper-animate-effect="flipInY" swiper-animate-duration="0.4s" swiper-animate-delay="1.6s">勇气</strong><br/><br/>在手心，在心底
 						</p>
 					</div>
 					<div class="link-box">
@@ -82,13 +78,13 @@
 				</div>
 
 
-				<div class="swiper-slide slide-5" id="slide-4">
+				<div class="swiper-slide" id="slide-4">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="flash" swiper-animate-duration="0.7s" swiper-animate-delay="0.3s">
 							黄艺林(菟籽琳)
 						</h3>
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="1s">
-                        空想的人吃不到<br/><br/><strong class="ani" swiper-animate-effect="flipInX" swiper-animate-duration="0.5s" swiper-animate-delay="1.6s">梦想的糖</strong>
+							空想的人吃不到<br/><br/><strong class="ani" swiper-animate-effect="flipInX" swiper-animate-duration="0.5s" swiper-animate-delay="1.6s">梦想的糖</strong>
 						</p>
 					</div>
 					
@@ -98,13 +94,13 @@
 					</div>
 				</div>
 
-				<div class="swiper-slide slide-6" id="slide-5">
+				<div class="swiper-slide" id="slide-5">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="fadeInUpBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							代雨丹(小雨)
 						</h3>
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.9s"><strong class="ani" swiper-animate-effect="pulse" swiper-animate-duration="0.8s" swiper-animate-delay="1.5s">专心</strong>	
-                        做自己的偶像
+							做自己的偶像
 						</p>
 					</div>
 					<div class="link-box">
@@ -112,14 +108,14 @@
 						<a href="http://weibo.com/u/5312010896" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-7" id="slide-6">
+				<div class="swiper-slide" id="slide-6">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="rubberBand" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							苏 鑫(素素)
 						</h3>
 						
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.4s" swiper-animate-delay="0.9s"><strong class="ani" swiper-animate-effect="shake" swiper-animate-duration="0.5s" swiper-animate-delay="1.3s">年轻</strong>
-                        的心跳，<br/><br/>你听得到
+							的心跳，<br/><br/>你听得到
 						</p>
 						
 					</div>
@@ -128,14 +124,14 @@
 						<a href="http://weibo.com/u/5224168666" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-8" id="slide-7">
+				<div class="swiper-slide" id="slide-7">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="bounceInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							覃婵婵(夏天)
 						</h3>
 						
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.9s"><strong class="ani" swiper-animate-effect="pulse" swiper-animate-duration="0.8s" swiper-animate-delay="1.5s">不伪装</strong>	
-                        的人最强大
+							的人最强大
 						</p>
 						
 					</div>
@@ -144,13 +140,13 @@
 						<a href="http://weibo.com/u/5224664043" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-9" id="slide-8">
+				<div class="swiper-slide" id="slide-8">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="rollIn" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							赵亚男(猫仔)
 						</h3>
 						<p class="ani text" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.9s">
-                        Color run！<br/><br/>用心记录每一次<strong class="ani" swiper-animate-effect="bounce" swiper-animate-duration="0.5s" swiper-animate-delay="1.5">蜕变</strong>
+							Color run！<br/><br/>用心记录每一次<strong class="ani" swiper-animate-effect="bounce" swiper-animate-duration="0.5s" swiper-animate-delay="1.5">蜕变</strong>
 						</p>
 					</div>
 					<div class="link-box">
@@ -158,19 +154,14 @@
 						<a href="http://weibo.com/u/5224038600" class="link">我的微博</a>
 					</div>
 				</div>
-				
-					
-				
-				
 			</div>
 		</div>
 	</div>
-<script type="text/javascript" src="../../wx/static/js/jquery-2.1.1.js"></script>
+	<script type="text/javascript" src="../../wx/static/js/jquery-2.1.1.js"></script>
 	<script type="text/javascript" src="../../wx/static/js/jquery.swipe.js"></script>
 	<script type="text/javascript" src="../../wx/static/js/swiper3.06.min.js"></script> 
 	<script type="text/javascript" src="../../wx/static/js/swiper.animate1.0.2.min.js"></script>
-	<script type="text/javascript" src="../../wx/static/js/index.js"></script>
-
+	<script type="text/javascript" src="../../wx/static/js/intro.js"></script>
 	<script type="text/javascript">slide()</script>
-</html>
+	</html>
 

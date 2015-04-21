@@ -1,4 +1,4 @@
-function loadSlide(){
+/*function loadSlide(){
 	$.get("http://mynona.xicp.net/wx/getWx1931.action", function(json){
 		data = JSON.parse(json).data;
 		var length = data.length,
@@ -10,7 +10,8 @@ function loadSlide(){
 
 	});
 }
-
+*/
+// var whiteInfo = [{name:'', motto:'',home:'',weibo:''}]
 function slide(){
 	function fixPagesHeight() {
 		$('.swiper-slide,.swiper-container').css({
@@ -25,17 +26,50 @@ function slide(){
 		direction: 'vertical',
 		mousewheelControl: true,
 		watchSlidesProgress: true,
+		watchActiveIndex: false,
+		preloadImages: false,
+		lazyLoading: true,
 		onInit: function(swiper) {
 			swiper.myactive = 0;
-			// swiperAnimateCache(swiper); 
+			swiperAnimateCache(swiper); 
 			swiperAnimate(swiper); 
+			for(var i = 5; i < 10; i++){
+				$("#slide-" + i).css("visibility", "hidden");
+			}
 
 		},
+		onSildeChangeStart: function(swiper){
+			console.log(swiper.slideNext());
+		},
+		
 		onSlideChangeEnd: function(swiper){ 
-			swiperAnimate(swiper);
-			console.log(swiper);
+			var index = swiper.activeIndex;
+			var prev = index - 1;
+			var next = index + 1;
+			for(var i = 0; i < index - 2; i ++){
+				if($('#slide-' + i) != null){
+					// $('#slide-' + i).removeClass('slide-' + (i+1));
+					$('#slide-' + i).css('visibility', "hidden");
+					console.log(swiper.activeIndex);
+				}
+			}
+			for(var j = index + 2; j < swiper.slides.length; j++){
+				if($('#slide-' + j) != null){
+					// $('#slide-' + j).removeClass('slide-' + (j+1));
+					$('#slide-' + j).css('visibility', "hidden");
+				}
+			}
+			$('#slide-' + prev).css('visibility', "visible");
+			$('#slide-' + prev).addClass('slide-'+ (prev + 1));
+			$('#slide-' + next).css('visibility', "visible");
+			$('#slide-' + next).addClass('slide-'+ (next + 1));
+			$('#slide-' + index).css('visibility', "visible");
+			$('#slide-' + index).addClass('slide-'+ (index + 1));
 
-		} ,
+
+			swiperAnimate(swiper);
+			
+		},
 		onProgress: function(swiper) {
 			for (var i = 0; i < swiper.slides.length; i++) {
 				var slide = swiper.slides[i];
@@ -43,7 +77,6 @@ function slide(){
 				var translate, boxShadow;
 
 				translate = progress * swiper.height * 0.8;
-				// scale = 1 ;
 				scale = 1 - Math.min(Math.abs(progress * 0.5), 1);
 				boxShadowOpacity = 0;
 
@@ -53,17 +86,13 @@ function slide(){
 					es = slide.style;
 					es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = 'translate3d(0,' + (translate) + 'px,0) scale(' + scale + ')';
 					es.zIndex=0;
-
-
+					
 				}else{
 					es = slide.style;
 					es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform ='';
 					es.zIndex=1;
-
 				}
-
 			}
-
 		},
 
 
@@ -71,7 +100,6 @@ function slide(){
 			for (var i = 0; i < swiper.slides.length; i++) {
 					//	es = swiper.slides[i].style;
 					//	es.webkitTransform = es.MsTransform = es.msTransform = es.MozTransform = es.OTransform = es.transform = '';
-
 					//	swiper.slides[i].style.zIndex = Math.abs(swiper.slides[i].progress);
 				}
 				swiper.myactive = swiper.activeIndex;
@@ -80,7 +108,6 @@ function slide(){
 
 				for (var i = 0; i < swiper.slides.length; i++) {
 						//if (i == swiper.myactive) {
-
 							es = swiper.slides[i].style;
 							es.webkitTransitionDuration = es.MsTransitionDuration = es.msTransitionDuration = es.MozTransitionDuration = es.OTransitionDuration = es.transitionDuration = speed + 'ms';
 						//}
@@ -91,5 +118,19 @@ function slide(){
 			});
 }
 
-
-
+$(document).ready(function(){
+	// var $slides = $('.swiper-slide #swiperWrapper');
+	// var len = $slides.length;
+	// for(var i = 0; i < len; i++){
+	// }
+	$('#music').click(function(e){
+		var audio = document.getElementById("audio");
+		if(audio.paused){
+			e.target.className += " play";
+			audio.play();
+		}else{
+			e.target.classList.remove("play");
+			audio.pause();
+		}
+	})
+})
