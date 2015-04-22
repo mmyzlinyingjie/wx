@@ -175,6 +175,8 @@ public class MultiDao {
         }
         return delete;
     }
+    
+    
 
     /**
      * 更新

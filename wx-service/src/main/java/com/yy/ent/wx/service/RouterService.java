@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -24,7 +25,6 @@ import me.chanjar.weixin.mp.api.WxMpMessageHandler;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
-import me.chanjar.weixin.mp.bean.WxMpCustomMessage.WxArticle;
 import me.chanjar.weixin.mp.bean.WxMpMassGroupMessage;
 import me.chanjar.weixin.mp.bean.WxMpMassNews;
 import me.chanjar.weixin.mp.bean.WxMpMassNews.WxMpMassNewsArticle;
@@ -35,6 +35,7 @@ import me.chanjar.weixin.mp.bean.WxMpXmlOutNewsMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutTextMessage;
 import me.chanjar.weixin.mp.bean.outxmlbuilder.NewsBuilder;
 import me.chanjar.weixin.mp.bean.result.WxMpMassUploadResult;
+import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -48,6 +49,7 @@ import com.yy.ent.cherroot.condition.DBCondition.OrderType;
 import com.yy.ent.commons.base.dto.Property;
 import com.yy.ent.commons.base.inject.Inject;
 import com.yy.ent.wx.common.constants.Constants;
+import com.yy.ent.wx.common.model.FansIdol;
 import com.yy.ent.wx.common.model.Image;
 import com.yy.ent.wx.common.model.LocalMedia;
 import com.yy.ent.wx.common.model.News;
@@ -57,6 +59,7 @@ import com.yy.ent.wx.common.model.Video;
 import com.yy.ent.wx.common.model.Voice;
 import com.yy.ent.wx.common.model.Wx1931;
 import com.yy.ent.wx.common.util.MessageType;
+import com.yy.ent.wx.dao.FansIdolDao;
 import com.yy.ent.wx.dao.ImageDao;
 import com.yy.ent.wx.dao.LocalMediaDao;
 import com.yy.ent.wx.dao.MultiDao;
@@ -101,9 +104,12 @@ public class RouterService extends BaseService {
 
 	@Inject(instance = LocalMediaDao.class)
 	protected LocalMediaDao localMediaDao;
+	
+	@Inject(instance = FansIdolDao.class)
+	protected FansIdolDao fansIdolDao;
+	
 
 	/**
-	 * 
 	 * @param wxMpService
 	 * @param jsonData
 	 *            图片类Image的json
@@ -359,7 +365,7 @@ public class RouterService extends BaseService {
 
 		WxMenuButton fans = new WxMenuButton();
 		fans.setName("粉丝区");
-		List<WxMenuButton> subFans = new ArrayList<WxMenuButton>(3);
+		List<WxMenuButton> subFans = new ArrayList<WxMenuButton>(4);
 		WxMenuButton fans1 = new WxMenuButton();
 		fans1.setKey("白队");
 		fans1.setName("白队");
@@ -372,9 +378,19 @@ public class RouterService extends BaseService {
 		fans3.setUrl("http://bbs.1931.com/");
 		fans3.setName("讨论区");
 		fans3.setType("view");
+		WxMenuButton fans4 = new WxMenuButton();
+		fans4.setKey("我的偶像");
+		fans4.setName("我的偶像");
+		fans4.setType("click");
+		WxMenuButton fans5 = new WxMenuButton();
+		fans5.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbea2b5d9b8ffad02&redirect_uri=http%3A%2F%2Fmynona.xicp.net%2Fwx%2FsetFocus.action&response_type=code&scope=snsapi_base&state=123#wechat_redirect");
+		fans5.setName("设置关注");
+		fans5.setType("view");
 		subFans.add(fans1);
 		subFans.add(fans2);
 		subFans.add(fans3);
+		subFans.add(fans4);
+		subFans.add(fans5);
 		fans.setSubButtons(subFans);
 
 		List<WxMenuButton> lists = new ArrayList<WxMenuButton>(2);
@@ -585,6 +601,34 @@ public class RouterService extends BaseService {
 				outMessage = newNews(nb, 3).fromUser(inMessage.getToUserName())
 						.toUser(inMessage.getFromUserName()).build();
 			}
+			else if (eventKey.equals("我的偶像")) {
+				
+				
+				System.out.println("============我的偶像==============");
+				//查询相关偶像关注表
+				List<Property> pros = multiDao.queryCollection("fans_idol_name", inMessage.getFromUserName());
+				if(pros == null || pros.size() == 0){
+					//回复引导关注信息
+					String contentText = "请设置关注的偶像";
+					outMessage = WxMpXmlOutMessage.TEXT().content(contentText)
+							.fromUser(inMessage.getToUserName())
+							.toUser(inMessage.getFromUserName()).build();
+				}else{
+					//回复偶像信息
+					for(Property pro: pros){
+						inMessage.setContent(pro.get("idol_name"));
+						outMessage = disposeText(outMessage, inMessage, wxMpService);
+					}
+				}
+				
+				//返回偶像信息
+			}else if (eventKey.equals("我们的歌")) {
+
+				// 发送图文消息
+				NewsBuilder nb = WxMpXmlOutMessage.NEWS();
+				outMessage = newNews(nb, 3).fromUser(inMessage.getToUserName())
+						.toUser(inMessage.getFromUserName()).build();
+			}
 			//给新用户的回复
 			if(inMessage.getEvent().equals("subscribe")){
 				String content = "欢迎关注1931粉丝团，么么哒!";
@@ -655,6 +699,7 @@ public class RouterService extends BaseService {
 		return outMessage;
 	}
 
+	
 	public WxMpXmlOutMessage disposeText(WxMpXmlOutMessage outMessage,
 			WxMpXmlMessage inMessage, WxMpService wxMpService)
 			throws WxErrorException {
@@ -662,7 +707,16 @@ public class RouterService extends BaseService {
 		String content = inMessage.getContent();
 		int count = 0;
 		boolean isNull = true;
-
+		
+		if(content.length() > 2){
+			String gz_content = content.substring(0, 2);
+			if(gz_content.equals("gz")){
+				
+			}
+			if(gz_content.equals("bz")){
+				
+			}
+		}
 		NewsBuilder nb = WxMpXmlOutMessage.NEWS();
 		count += getRandomVideosByName(nb, 4, content);
 		outMessage = nb.fromUser(inMessage.getToUserName())
@@ -1121,6 +1175,45 @@ public class RouterService extends BaseService {
 			}
 		}
 		return newContent + imageContent + voiceContent ;
+	}
+
+	public Map setFocus(WxMpService wxMpService, String code) throws WxErrorException {
+		
+		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
+		wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+		String openId = wxMpOAuth2AccessToken.getOpenId();
+		
+		List<Property> pros = multiDao.queryCollection("fans_idol", openId);
+		List<Integer> list = new ArrayList<Integer>();
+		for(Property pro: pros){
+			list.add(Integer.valueOf(pro.get("idol_id")));
+		}
+		Map map = new HashMap();
+		map.put("fans_id", openId);
+		map.put("idol_id", list);
+		return map;
+	}
+
+	public int addFocus(String jsonData) throws Exception {
+		
+		System.out.println(jsonData);
+		JSONObject jo = JSON.parseObject(jsonData);
+		String fans_id = (String) jo.get("fans_id");
+		String idol_id = (String) jo.get("idol_id");
+		FansIdol fansIdol = new FansIdol();
+		fansIdol.setFans_id(fans_id);
+		fansIdol.setIdol_id(Integer.valueOf(idol_id));
+		return fansIdolDao.insert(fansIdol);
+	}
+
+	public int deleteFocus(String jsonData) {
+		
+		System.out.println(jsonData);
+		JSONObject jo = JSON.parseObject(jsonData);
+		String fans_id = (String) jo.get("fans_id");
+		String idol_id = (String) jo.get("idol_id");
+
+		return multiDao.delete("delete_fans_idol", fans_id, idol_id);
 	}
 
 }

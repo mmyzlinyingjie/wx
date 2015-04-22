@@ -2,6 +2,7 @@ package com.yy.ent.wx.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +13,6 @@ import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.WxMpServiceImpl;
-import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
 
@@ -28,7 +28,6 @@ import com.yy.ent.commons.base.dto.Property;
 import com.yy.ent.commons.base.inject.Inject;
 import com.yy.ent.wx.base.BaseAction;
 import com.yy.ent.wx.common.model.Image;
-import com.yy.ent.wx.common.model.Video;
 import com.yy.ent.wx.common.model.Wx1931;
 import com.yy.ent.wx.dao.ImageDao;
 import com.yy.ent.wx.service.RouterService;
@@ -57,6 +56,7 @@ public class RouterAction extends BaseAction {
 		wxMpConfigStorage.setAppId("wxbea2b5d9b8ffad02"); // 设置微信公众号的appid
 		wxMpConfigStorage.setSecret("c084c7231172adab97ea4ce515516333"); // 设置微信公众号的app
 		wxMpConfigStorage.setToken("vzhanqun1234567890"); // 设置微信公众号的token
+		wxMpConfigStorage.setOauth2redirectUri("http://mynona.xicp.net/wx/setFocus.action");
 		wxMpService = new WxMpServiceImpl();
 		wxMpService.setWxMpConfigStorage(wxMpConfigStorage);
 
@@ -290,7 +290,11 @@ public class RouterAction extends BaseAction {
 			WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
 			System.out.println("微信消息:" + inMessage.toString());
 			System.out.println("-------------------");
-
+			if(inMessage.getEventKey().equals("http://bbs.1931.com/")){
+				inMessage.setEventKey("http://www.baidu.com/");
+				System.out.println("?//////////////////////////////////////");
+			}
+			System.out.println("微信消息2:" + inMessage.toString());
 			
 			if(outMessage == null){
 				outMessage = routerService.dispose(outMessage, inMessage,
@@ -416,5 +420,23 @@ public class RouterAction extends BaseAction {
 	public void reSetRouter(){
 		setRouter = false;
 	}
-
+	
+	public Forward setFocus(@Read(key = "code") String code) throws WxErrorException{
+		
+		Map map  =  routerService.setFocus(wxMpService, code);
+		getRequest().getSession().setAttribute("fans_id", map.get("fans_id"));
+		getRequest().getSession().setAttribute("idol_id", map.get("idol_id"));
+		return getForward("idol.jsp");
+	}
+	
+	public Render addFocus(@Read(key = "data") String data) throws Exception{
+		
+		return getRender(routerService.addFocus(data));
+	}
+	
+	public Render deleteFocus(@Read(key = "data") String data) throws WxErrorException{
+		
+		return getRender(routerService.deleteFocus(data));
+	}
 }
+
