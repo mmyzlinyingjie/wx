@@ -74,6 +74,8 @@ public class MultiDao {
         Properties all = new Properties();
         FileInputStream is = null;
         try {
+        	System.out.println("=================================================");
+        	System.out.println(conf);
             File file = new File(conf);
             File[] listFiles = file.getParentFile().listFiles(new FilenameFilter() {
                 @Override
