@@ -444,6 +444,16 @@ public class RouterAction extends BaseAction {
 		// return getForward("uploadImage-yingjie.jsp");
 		return getForward("idol.jsp");
 	}
+	
+	public Forward setFocus2(@Read(key = "code") String code)
+			throws WxErrorException {
+
+		Map map = routerService.setFocus(wxMpService, code);
+		getRequest().getSession().setAttribute("fans_id", map.get("fans_id"));
+		getRequest().getSession().setAttribute("idol_id", map.get("idol_id"));
+		// return getForward("uploadImage-yingjie.jsp");
+		return getForward("uploadImage-yingjie.jsp");
+	}
 
 	public Render addFocus(@Read(key = "data") String data) throws Exception {
 
