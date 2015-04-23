@@ -23,12 +23,12 @@
   <button type="submit" class="btn btn-primary">上传</button>
 </form>
 
-    <c:forEach items="${idol_id}" var="user" varStatus="vs">
+    <c:forEach items="${idol_id}" var="id" varStatus="vs">
 		<tr>
-			 <td align = "center">${user}</td><br>
+			 <td align = "center">${id}</td><br>
 		 </tr>
 	</c:forEach>
-${fans_id}
-${idol_id}
+   ${fans_id}
+
 </body>
 </html>

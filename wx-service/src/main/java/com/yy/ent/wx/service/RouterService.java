@@ -1179,10 +1179,10 @@ public class RouterService extends BaseService {
 
 	public Map setFocus(WxMpService wxMpService, String code) throws WxErrorException {
 		
-		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
-		wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
-		String openId = wxMpOAuth2AccessToken.getOpenId();
-		
+//		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
+//		wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+//		String openId = wxMpOAuth2AccessToken.getOpenId();
+		String openId = "toD6flsi1L6NDiryqefCalDF1k6XE";
 		List<Property> pros = multiDao.queryCollection("fans_idol", openId);
 		List<Integer> list = new ArrayList<Integer>();
 		for(Property pro: pros){
