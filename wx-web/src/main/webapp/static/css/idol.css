@@ -8,7 +8,7 @@ body {
   color: #333;
   font-family: "Microsoft YaHei", "\5fae\8f6f\96c5\9ed1", "Arial", "\5B8B\4F53";
   font-size: 1rem;
-  background: #000; }
+  background: #FF659D; }
 
 *, ul, li {
   margin: 0;
@@ -25,14 +25,96 @@ li {
   .my-idol li, .all li {
     position: relative;
     margin: 1%;
-    width: 30%; }
+    width: 30%;
+    text-align: center; }
+  .my-idol .white, .my-idol .red, .my-idol ul, .all .white, .all .red, .all ul {
+    overflow: hidden; }
+  .my-idol .white h2, .my-idol .red h2, .all .white h2, .all .red h2 {
+    width: 13.3%;
+    height: 0;
+    position: relative;
+    padding: 1% 0 7% 7%;
+    font-weight: normal;
+    font-size: 1.3rem; }
+  .my-idol .white, .all .white {
+    background: url('../../static/image/icon/white.png');
+    background-size: 15%; }
+    .my-idol .white h2, .all .white h2 {
+      color: red;
+      background: url('../../static/image/icon/white-bg.png') no-repeat;
+      background-size: 100%; }
+  .my-idol .red, .all .red {
+    background: url('../../static/image/icon/red.png');
+    background-size: 15%; }
+    .my-idol .red h2, .all .red h2 {
+      color: #fff;
+      background: url('../../static/image/icon/red-bg.png') no-repeat;
+      background-size: 100%; }
   .my-idol .pic, .all .pic {
     position: relative; }
     .my-idol .pic .border, .all .pic .border {
-      z-index: -1;
       position: absolute;
-      top: 6%;
+      top: 11.6%;
       width: 100%;
       padding-bottom: 100%;
       background: url('../../static/image/icon/border.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head, .all .pic .head {
+      z-index: 2;
+      position: relative;
+      width: 100%;
+      padding-bottom: 115%; }
+    .my-idol .pic .head-1, .all .pic .head-1 {
+      background: url('../../static/image/head/1.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-2, .all .pic .head-2 {
+      background: url('../../static/image/head/2.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-3, .all .pic .head-3 {
+      background: url('../../static/image/head/3.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-4, .all .pic .head-4 {
+      background: url('../../static/image/head/4.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-5, .all .pic .head-5 {
+      background: url('../../static/image/head/5.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-6, .all .pic .head-6 {
+      background: url('../../static/image/head/6.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-7, .all .pic .head-7 {
+      background: url('../../static/image/head/7.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-8, .all .pic .head-8 {
+      background: url('../../static/image/head/8.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-9, .all .pic .head-9 {
+      background: url('../../static/image/head/9.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-10, .all .pic .head-10 {
+      background: url('../../static/image/head/10.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-11, .all .pic .head-11 {
+      background: url('../../static/image/head/11.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-12, .all .pic .head-12 {
+      background: url('../../static/image/head/12.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-13, .all .pic .head-13 {
+      background: url('../../static/image/head/13.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-14, .all .pic .head-14 {
+      background: url('../../static/image/head/14.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-15, .all .pic .head-15 {
+      background: url('../../static/image/head/15.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-16, .all .pic .head-16 {
+      background: url('../../static/image/head/16.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-17, .all .pic .head-17 {
+      background: url('../../static/image/head/17.png') no-repeat;
+      background-size: 100%; }
+    .my-idol .pic .head-18, .all .pic .head-18 {
+      background: url('../../static/image/head/18.png') no-repeat;
       background-size: 100%; }
