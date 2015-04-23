@@ -6,15 +6,14 @@
 	<title>1931</title>
 	<meta name="viewport"
 	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-
-	<link rel="stylesheet" type="text/css" href="../../wx/static/css/index.css">
+	<link rel="stylesheet" type="text/css" href="../../wx/static/css/intro.css">
 	<link rel="stylesheet" type="text/css" href="../../wx/static/css/swiper3.06.min.css">
 	<link rel="stylesheet" type="text/css" href="../../wx/static/css/animate.min.css">
 </head>
 <body>
 	<div style="max-width:640px; margin:0 auto;">
 		<a id="music" class="music play" >
-			<audio id="audio" src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3" loop="" autoplay="" data-src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3"></audio>
+			<audio id="audio" src="../../wx/static/music/red.mp3" loop="" autoplay="" data-src="http://img.liveapp.cn/group1/M00/04/9D/CoQ8n1TdwF6AajpAACuzHeIiSSo188.mp3"></audio>
 		</a>
 
 
@@ -51,7 +50,7 @@
 						<a href="http://weibo.com/u/1010458283" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-3" id="slide-2">
+				<div class="swiper-slide" id="slide-2">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="bounceInDown" swiper-animate-duration="0.9s" swiper-animate-delay="0.3s">
 							姜京京(11)
@@ -66,7 +65,7 @@
 						<a href="http://weibo.com/u/5223352142" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-4" id="slide-3">
+				<div class="swiper-slide" id="slide-3">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="rubberBand" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							李 玲(铛铛)
@@ -82,7 +81,7 @@
 				</div>
 
 
-				<div class="swiper-slide slide-5" id="slide-4">
+				<div class="swiper-slide" id="slide-4">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="flash" swiper-animate-duration="0.7s" swiper-animate-delay="0.3s">
 							马剑越(越萧)
@@ -98,7 +97,7 @@
 					</div>
 				</div>
 
-				<div class="swiper-slide slide-6" id="slide-5">
+				<div class="swiper-slide" id="slide-5">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="fadeInUpBig" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							王筱月(早喵)
@@ -112,7 +111,7 @@
 						<a href="#" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-7" id="slide-6">
+				<div class="swiper-slide" id="slide-6">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="rubberBand" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							吴 茜(茜茜)
@@ -128,7 +127,7 @@
 						<a href="http://weibo.com/u/5224648500" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-8" id="slide-7">
+				<div class="swiper-slide" id="slide-7">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="bounceInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							严文竹(叶子)
@@ -144,7 +143,7 @@
 						<a href="#" class="link">我的微博</a>
 					</div>
 				</div>
-				<div class="swiper-slide slide-9" id="slide-8">
+				<div class="swiper-slide" id="slide-8">
 					<div class="info">
 						<h3 class="ani" swiper-animate-effect="rollIn" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
 							张 扬(暖暖)
@@ -158,19 +157,15 @@
 						<a href="http://weibo.com/u/5223382374" class="link">我的微博</a>
 					</div>
 				</div>
-				
-					
-				
-				
 			</div>
 		</div>
 	</div>
-<script type="text/javascript" src="../../wx/static/js/jquery-2.1.1.js"></script>
+	<div class="next"></div>
+	<script type="text/javascript" src="../../wx/static/js/jquery-2.1.1.js"></script>
 	<script type="text/javascript" src="../../wx/static/js/jquery.swipe.js"></script>
 	<script type="text/javascript" src="../../wx/static/js/swiper3.06.min.js"></script> 
 	<script type="text/javascript" src="../../wx/static/js/swiper.animate1.0.2.min.js"></script>
-	<script type="text/javascript" src="../../wx/static/js/index.js"></script>
-
+	<script type="text/javascript" src="../../wx/static/js/intro.js"></script>
 	<script type="text/javascript">slide()</script>
 </html>
 
