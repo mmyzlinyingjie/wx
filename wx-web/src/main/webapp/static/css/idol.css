@@ -30,6 +30,7 @@ li {
   .my-idol .white, .my-idol .red, .my-idol ul, .all .white, .all .red, .all ul {
     overflow: hidden; }
   .my-idol .white h2, .my-idol .red h2, .all .white h2, .all .red h2 {
+  margin: 3% 0 0 0;
     width: 13.3%;
     height: 0;
     position: relative;
