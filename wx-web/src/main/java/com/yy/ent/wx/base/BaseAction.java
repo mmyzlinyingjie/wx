@@ -15,7 +15,7 @@ public class BaseAction extends com.yy.ent.cherrice.BaseAction {
     private static final String KEY_RESULT = "result";    //JSON 是否成功标识KEY  0: 失败  1：成功
     private static final String KEY_DATA = "data";        //JSON 数据KEY
     private static final String RESULT_SUCCESS = "0";      //成功
-    private static final String RESULT_FAIL = "1";      //成功
+    private static final String RESULT_FAIL = "1";      //失败
 
 
     @Inject(instance = UdbEnv.class)

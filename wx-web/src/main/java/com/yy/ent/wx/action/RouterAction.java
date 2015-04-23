@@ -457,12 +457,20 @@ public class RouterAction extends BaseAction {
 
 	public Render addFocus(@Read(key = "data") String data) throws Exception {
 
-		return getRender(routerService.addFocus(data));
+		int result = routerService.addFocus(data);
+		if(result == 0){
+			return getRenderFail("添加失败");
+		}
+		return getRender(result);
 	}
 
 	public Render deleteFocus(@Read(key = "data") String data)
 			throws WxErrorException {
 
-		return getRender(routerService.deleteFocus(data));
+		int result = routerService.deleteFocus(data);
+		if(result == 0){
+			return getRenderFail("删除失败");
+		}
+		return getRender(result);
 	}
 }
