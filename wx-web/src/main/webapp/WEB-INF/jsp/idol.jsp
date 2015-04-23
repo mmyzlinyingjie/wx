@@ -34,9 +34,9 @@ var idols =[]
 			</ul>
 		</div>
 		<div class="all">
-			<section class="white">
+			<section class="white" id="list">
 				<h2>白队</h2>
-				<ul id="list">
+				<ul>
 					<li>
 						<div class="pic">
 							<div class="border"></div>
