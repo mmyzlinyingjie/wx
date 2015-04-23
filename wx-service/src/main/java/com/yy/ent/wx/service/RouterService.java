@@ -31,7 +31,6 @@ import me.chanjar.weixin.mp.bean.WxMpMassNews.WxMpMassNewsArticle;
 import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutImageMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.WxMpXmlOutNewsMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutTextMessage;
 import me.chanjar.weixin.mp.bean.custombuilder.NewsBuilder;
 import me.chanjar.weixin.mp.bean.result.WxMpMassUploadResult;
@@ -1192,7 +1191,15 @@ public class RouterService extends BaseService {
 		FansIdol fansIdol = new FansIdol();
 		fansIdol.setFans_id(fans_id);
 		fansIdol.setIdol_id(Integer.valueOf(idol_id));
-		return fansIdolDao.insert(fansIdol);
+		
+		DBCondition db = new DBCondition();
+		db.addCondition("fans_id", fans_id);
+		db.addCondition("idol_id", idol_id);
+		List<FansIdol> list = fansIdolDao.query(db);
+		if(list == null || list.size() == 0){
+			return fansIdolDao.insert(fansIdol);
+		}
+		return 0;
 	}
 
 	public int deleteFocus(String jsonData) {

@@ -7,22 +7,15 @@ import com.yy.ent.cherroot.entity.annotation.Entity;
 @Entity(table = "fans_idol")
 public class FansIdol extends EntityBean{
 
-	 @Column(name = "id", isPK = true)
-	 public int id;
+
 	 
-	 @Column(name = "fans_id")
+	 @Column(name = "fans_id", isPK = true)
 	 public String fans_id;
 
-	 @Column(name = "idol_id")
+	 @Column(name = "idol_id", isPK = true)
 	 public int idol_id;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 
 	public String getFans_id() {
 		return fans_id;
