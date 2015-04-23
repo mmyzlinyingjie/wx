@@ -32,7 +32,7 @@ select idol_id from fans_idol where fans_id = ?;
 </entry>
 
 <entry key="fans_idol_name">
-select idol_name from fans_idol, idol where idol.id = fans_idol.idol_id and fans_id = ?;
+select idol_name,nick_name from fans_idol, idol where idol.id = fans_idol.idol_id and fans_id = ?;
 </entry>
 
 <entry key="delete_fans_idol">

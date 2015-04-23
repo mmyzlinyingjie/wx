@@ -13,6 +13,7 @@ import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.WxMpServiceImpl;
+import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
 
@@ -45,7 +46,8 @@ public class RouterAction extends BaseAction {
 	private WxMpInMemoryConfigStorage wxMpConfigStorage;
 	private WxMpService wxMpService;
 	private WxMpMessageRouter wxMpMessageRouter;
-	private boolean setRouter = false; 
+	private boolean setRouter = false;
+	private Long lastMsgId;
 
 	@Inject(instance = Image.class)
 	private Image image;
@@ -56,7 +58,8 @@ public class RouterAction extends BaseAction {
 		wxMpConfigStorage.setAppId("wxbea2b5d9b8ffad02"); // 设置微信公众号的appid
 		wxMpConfigStorage.setSecret("c084c7231172adab97ea4ce515516333"); // 设置微信公众号的app
 		wxMpConfigStorage.setToken("vzhanqun1234567890"); // 设置微信公众号的token
-		wxMpConfigStorage.setOauth2redirectUri("http://mynona.xicp.net/wx/setFocus.action");
+		wxMpConfigStorage
+				.setOauth2redirectUri("http://mynona.xicp.net/wx/setFocus.action");
 		wxMpService = new WxMpServiceImpl();
 		wxMpService.setWxMpConfigStorage(wxMpConfigStorage);
 
@@ -102,8 +105,6 @@ public class RouterAction extends BaseAction {
 		return getForward("uploadImage.jsp");
 	}
 
-
-	
 	/**
 	 * 获取路由文件列表接口
 	 * 
@@ -172,6 +173,7 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 删除图片
+	 * 
 	 * @param jsonData
 	 * @return
 	 * @throws Exception
@@ -185,9 +187,10 @@ public class RouterAction extends BaseAction {
 		}
 		return getRenderFail("参数错误");
 	}
-	
+
 	/**
 	 * 删除文本
+	 * 
 	 * @param jsonData
 	 * @return
 	 * @throws Exception
@@ -201,7 +204,7 @@ public class RouterAction extends BaseAction {
 		}
 		return getRenderFail("参数错误");
 	}
-	
+
 	/**
 	 * 上传图片到本服务器
 	 * 
@@ -209,7 +212,7 @@ public class RouterAction extends BaseAction {
 	 * @throws Exception
 	 */
 	public Render uploadImage() throws Exception {
-		
+
 		System.out.println("-------------上传图片------------------------");
 		String message = routerService.uploadImage(getRequest());
 		if (message.equals("fail")) {
@@ -254,9 +257,13 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 微信api请求入口
-	 * @param signature  微信参数
-	 * @param nonce  微信参数
-	 * @param timestamp  微信参数
+	 * 
+	 * @param signature
+	 *            微信参数
+	 * @param nonce
+	 *            微信参数
+	 * @param timestamp
+	 *            微信参数
 	 * @return
 	 * @throws Exception
 	 */
@@ -264,6 +271,7 @@ public class RouterAction extends BaseAction {
 			@Read(key = "nonce") String nonce,
 			@Read(key = "timestamp") String timestamp) throws Exception {
 
+		System.out.println("----------------来自微信的请求--------------------------");
 		if (!setRouter) {
 			wxMpMessageRouter = new WxMpMessageRouter(wxMpService);
 			routerService.setRouter(wxMpMessageRouter);
@@ -281,29 +289,26 @@ public class RouterAction extends BaseAction {
 		String encryptType = StringUtils.isBlank(getRequest().getParameter(
 				"encrypt_type")) ? "raw" : getRequest().getParameter(
 				"encrypt_type");
-		
+
+		// 明文传输的消息
 		if ("raw".equals(encryptType)) {
-			System.out.println("明文传输");
-			// 明文传输的消息
 			WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(getRequest()
 					.getInputStream());
 			WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
 			System.out.println("微信消息:" + inMessage.toString());
-			System.out.println("-------------------");
-			if(inMessage.getEventKey().equals("http://bbs.1931.com/")){
-				inMessage.setEventKey("http://www.baidu.com/");
-				System.out.println("?//////////////////////////////////////");
-			}
-			System.out.println("微信消息2:" + inMessage.toString());
-			
-			if(outMessage == null){
-				outMessage = routerService.dispose(outMessage, inMessage,
-						wxMpService);
-			}
-			if (outMessage != null)
-				getResponse().getWriter().write(outMessage.toXml());
-			else{
+
+			if (outMessage == null) {
+				// 防止重传,回复空串，然后以客服方式回复消息
+				System.out.println("防止重传--------------");
+				getResponse().getWriter().write("");
+				getResponse().getWriter().flush();
 				getResponse().getWriter().close();
+				routerService.dispose(inMessage, wxMpService);
+
+			} else {
+				System.out.println("已被路由拦截-----------");
+				getResponse().getWriter().write(outMessage.toXml());
+
 			}
 		}
 		return getRender("success");
@@ -311,6 +316,7 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 设置菜单
+	 * 
 	 * @return
 	 * @throws WxErrorException
 	 */
@@ -323,6 +329,7 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 查询当前设置的菜单
+	 * 
 	 * @return
 	 * @throws WxErrorException
 	 */
@@ -333,6 +340,7 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 删除微信菜单
+	 * 
 	 * @return
 	 * @throws WxErrorException
 	 */
@@ -343,12 +351,13 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 获取1931资源
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
 	public Render getWx1931() throws Exception {
 
-		//为1表示自拍萌照
+		// 为1表示自拍萌照
 		List<Wx1931> list = routerService.getWx1931(1);
 		List<Property> proList = new ArrayList<Property>();
 		for (Wx1931 wx : list) {
@@ -361,6 +370,7 @@ public class RouterAction extends BaseAction {
 
 	/**
 	 * 图文信息（未使用）
+	 * 
 	 * @return
 	 * @throws WxErrorException
 	 */
@@ -368,9 +378,10 @@ public class RouterAction extends BaseAction {
 		routerService.massGroupMessageSend(wxMpService);
 		return getRender("success");
 	}
-	
+
 	/**
 	 * 红队介绍页
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -378,9 +389,10 @@ public class RouterAction extends BaseAction {
 
 		return getForward("red.jsp");
 	}
-	
+
 	/**
 	 * 白队介绍页
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -388,27 +400,29 @@ public class RouterAction extends BaseAction {
 
 		return getForward("white.jsp");
 	}
-	
-	
-	
+
 	/**
 	 * 上传视频 (大小只能在10M以内，暂时不考虑使用)
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public Render uploadVideo(@Read(key = "data") String jsonData) throws Exception {
-		
+	public Render uploadVideo(@Read(key = "data") String jsonData)
+			throws Exception {
+
 		System.out.println("-------------上传视频到微信服务器------------------------");
 		JSONObject jo = JSON.parseObject(jsonData);
 		String filePath = (String) jo.get("filePath");
 		String desc = (String) jo.get("desc");
 		String title = (String) jo.get("title");
-		int result = routerService.fileUploadVideo(wxMpService, filePath, desc, title);
+		int result = routerService.fileUploadVideo(wxMpService, filePath, desc,
+				title);
 		return getRender(result);
 	}
-	
+
 	/**
 	 * 后台主页
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -416,28 +430,29 @@ public class RouterAction extends BaseAction {
 
 		return getForward("main.jsp");
 	}
-	
-	public void reSetRouter(){
+
+	public void reSetRouter() {
 		setRouter = false;
 	}
-	
-	public Forward setFocus(@Read(key = "code") String code) throws WxErrorException{
-		
-		Map map  =  routerService.setFocus(wxMpService, code);
+
+	public Forward setFocus(@Read(key = "code") String code)
+			throws WxErrorException {
+
+		Map map = routerService.setFocus(wxMpService, code);
 		getRequest().getSession().setAttribute("fans_id", map.get("fans_id"));
 		getRequest().getSession().setAttribute("idol_id", map.get("idol_id"));
-		//return getForward("uploadImage-yingjie.jsp");
+		// return getForward("uploadImage-yingjie.jsp");
 		return getForward("idol.jsp");
 	}
-	
-	public Render addFocus(@Read(key = "data") String data) throws Exception{
-		
+
+	public Render addFocus(@Read(key = "data") String data) throws Exception {
+
 		return getRender(routerService.addFocus(data));
 	}
-	
-	public Render deleteFocus(@Read(key = "data") String data) throws WxErrorException{
-		
+
+	public Render deleteFocus(@Read(key = "data") String data)
+			throws WxErrorException {
+
 		return getRender(routerService.deleteFocus(data));
 	}
 }
-
