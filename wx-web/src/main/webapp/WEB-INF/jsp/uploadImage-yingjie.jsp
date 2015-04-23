@@ -23,9 +23,10 @@
   <button type="submit" class="btn btn-primary">上传</button>
 </form>
 
-    <c:forEach items="${idol_id}" var="id" varStatus="vs">
+    <c:forEach items="${idol}" var="idolx" varStatus="vs">
 		<tr>
-			 <td align = "center">${id}</td><br>
+			 <td align = "center">${idolx.idol_id}</td><br>
+			  <td align = "center">${idolx.idol_name}</td><br>
 		 </tr>
 	</c:forEach>
    ${fans_id}

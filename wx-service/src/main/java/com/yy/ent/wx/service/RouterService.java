@@ -1172,13 +1172,14 @@ public class RouterService extends BaseService {
 //		String openId = wxMpOAuth2AccessToken.getOpenId();
 		String openId = "toD6flsi1L6NDiryqefCalDF1k6XE";
 		List<Property> pros = multiDao.queryCollection("fans_idol", openId);
-		List<Integer> list = new ArrayList<Integer>();
-		for(Property pro: pros){
-			list.add(Integer.valueOf(pro.get("idol_id")));
-		}
+//		List<Integer> list = new ArrayList<Integer>();
+//		for(Property pro: pros){
+//			System.out.println(pro.get("idol_id"));
+//			System.out.println(pro.get("idol_name"));
+//		}
 		Map map = new HashMap();
 		map.put("fans_id", openId);
-		map.put("idol_id", list);
+		map.put("idol", pros);
 		return map;
 	}
 

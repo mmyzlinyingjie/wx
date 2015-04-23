@@ -28,7 +28,7 @@ select description from news where type = 4;
 </entry>
 
 <entry key="fans_idol">
-select idol_id from fans_idol where fans_id = ?;
+select idol_id ,idol_name from fans_idol, idol where fans_idol.idol_id = idol.id and fans_id = ?;
 </entry>
 
 <entry key="fans_idol_name">

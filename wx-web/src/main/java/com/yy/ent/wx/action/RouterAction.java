@@ -450,7 +450,7 @@ public class RouterAction extends BaseAction {
 
 		Map map = routerService.setFocus(wxMpService, code);
 		getRequest().getSession().setAttribute("fans_id", map.get("fans_id"));
-		getRequest().getSession().setAttribute("idol_id", map.get("idol_id"));
+		getRequest().getSession().setAttribute("idol", map.get("idol"));
 		// return getForward("uploadImage-yingjie.jsp");
 		return getForward("uploadImage-yingjie.jsp");
 	}
