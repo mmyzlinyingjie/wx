@@ -33,8 +33,8 @@ var idols =[]
 				</c:forEach>
 			</ul>
 		</div>
-		<div class="all">
-			<section class="white" id="list">
+		<div class="all" id="list">
+			<section class="white">
 				<h2>白队</h2>
 				<ul>
 					<li>
