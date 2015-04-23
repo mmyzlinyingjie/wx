@@ -23,12 +23,12 @@
   <button type="submit" class="btn btn-primary">上传</button>
 </form>
 
-    <c:forEach items="${imageList}" var="user" varStatus="vs">
+    <c:forEach items="${idol_id}" var="user" varStatus="vs">
 		<tr>
-			 <td align = "center">${user.id}</td>
-			 <td align = "center">${user.desc}</td>	
+			 <td align = "center">${user}</td><br>
 		 </tr>
 	</c:forEach>
-
+${fans_id}
+${idol_id}
 </body>
 </html>

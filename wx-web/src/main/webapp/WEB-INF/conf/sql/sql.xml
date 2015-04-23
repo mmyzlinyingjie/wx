@@ -36,7 +36,7 @@ select idol_name from fans_idol, idol where idol.id = fans_idol.idol_id and fans
 </entry>
 
 <entry key="delete_fans_idol">
-delete fans_idol where fans_id = '?' and idol_id = ?;
+delete from fans_idol where fans_id = ? and idol_id = ?;
 </entry>
 
 </properties>
