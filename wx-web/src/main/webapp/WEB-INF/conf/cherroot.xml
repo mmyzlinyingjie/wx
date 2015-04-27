@@ -9,9 +9,9 @@
         <datasource>
             <index>0</index>
             <driver>com.mysql.jdbc.Driver</driver>
-            <url>jdbc:mysql://localhost:3306/wx</url>
-            <user>root</user>
-            <password>mynona</password>
+            <url>jdbc:mysql://172.19.27.81:3306/wx</url>
+            <user>hww</user>
+            <password>hww</password>
             <maxActive>100</maxActive>
             <minIdle>10</minIdle>
             <maxIdle>50</maxIdle>
