@@ -348,10 +348,10 @@ public class RouterService extends BaseService {
 		WxMenuButton yszx = new WxMenuButton();
 		yszx.setName("一手资讯");
 		List<WxMenuButton> subYszx = new ArrayList<WxMenuButton>(5);
-		// WxMenuButton yszx1 = new WxMenuButton();
-		// yszx1.setUrl("http://www.baidu.com");
-		// yszx1.setName("推送历史");
-		// yszx1.setType("view");
+		 WxMenuButton yszx1 = new WxMenuButton();
+		 yszx1.setKey("往期内容");
+		 yszx1.setName("往期内容");
+		 yszx1.setType("click");
 		WxMenuButton yszx2 = new WxMenuButton();
 		yszx2.setUrl("http://www.1931.com/dream/mobile/newsPhotos.action");
 		yszx2.setName("精彩留影");
@@ -368,7 +368,7 @@ public class RouterService extends BaseService {
 		yszx5.setUrl("http://bbs.1931.com/thread-20512-1-1.html");
 		yszx5.setName("直播时间表");
 		yszx5.setType("view");
-		// subYszx.add(yszx1);
+		 subYszx.add(yszx1);
 		subYszx.add(yszx2);
 		subYszx.add(yszx3);
 		subYszx.add(yszx4);
@@ -613,6 +613,13 @@ public class RouterService extends BaseService {
 					// 发送图文消息
 					NewsBuilder nb = WxMpCustomMessage.NEWS();
 					message = newNews(nb, 3)
+							.toUser(inMessage.getFromUserName()).build();
+					wxMpService.customMessageSend(message);
+				}  else if (eventKey.equals("往期内容")) {
+
+					// 发送图文消息
+					NewsBuilder nb = WxMpCustomMessage.NEWS();
+					message = getMassNews(inMessage, wxMpService, nb, 1)
 							.toUser(inMessage.getFromUserName()).build();
 					wxMpService.customMessageSend(message);
 				} else if (eventKey.equals("我的偶像")) {
@@ -1147,11 +1154,11 @@ public class RouterService extends BaseService {
 			throws WxErrorException {
 
 		System.out.println("before------------------");
-/*		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
+		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
 		wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
-		String openId = wxMpOAuth2AccessToken.getOpenId();*/
+		String openId = wxMpOAuth2AccessToken.getOpenId();
 //		System.out.println("openId ------------------------"+ openId);
-		 String openId = "test_openId";
+//		 String openId = "test_openId";
 		List<Property> pros = multiDao.queryCollection("fans_idol", openId);
 		// List<Integer> list = new ArrayList<Integer>();
 		// for(Property pro: pros){
@@ -1205,17 +1212,20 @@ public class RouterService extends BaseService {
 	public String sendMassText(WxMpService wxMpService, String data)
 			throws Exception {
 
+		System.out.println("群发内容：" + data);
 		WxMpMassOpenIdsMessage massMessage = new WxMpMassOpenIdsMessage();
 		massMessage.setMsgType(WxConsts.MASS_MSG_TEXT);
-		massMessage.setContent("消息内容");
+		massMessage.setContent(data);
 		// 最多支持10,000个群发用户
 		List<String> listFansStr = massMessage.getToUsers();
 		List<Fans> listFan = getFansId();
 		for (Fans fans : listFan) {
 			listFansStr.add(fans.getFansId());
+			System.out.println("群发给...." + fans.getFansId());
 		}
 
-		return wxMpService.massOpenIdsMessageSend(massMessage).toString();
+		WxMpMassSendResult  result = wxMpService.massOpenIdsMessageSend(massMessage);
+		return result.toString();
 	}
 	
 	public void addMassArticle(WxMpMassNews news, int type) throws Exception{
@@ -1258,7 +1268,7 @@ public class RouterService extends BaseService {
 	}
 	
 	
-	public NewsBuilder getMassNews(NewsBuilder nb, int type) {
+	public NewsBuilder getMassNews(WxMpXmlMessage inMessage, WxMpService wxMpService, NewsBuilder nb, int type) throws WxErrorException {
 
 		DBCondition db = new DBCondition();
 		db.addCondition("type", type);
@@ -1283,6 +1293,7 @@ public class RouterService extends BaseService {
 			if (count > 9)
 				break;
 		}
+
 		return nb;
 	}
 }

@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yy.ent.cherrice.Return;
+import com.yy.ent.cherrice.annotation.Get;
 import com.yy.ent.cherrice.annotation.Read;
 import com.yy.ent.cherrice.ret.Forward;
 import com.yy.ent.cherrice.ret.Render;
@@ -451,8 +452,10 @@ public class RouterAction extends BaseAction {
 	 * @return
 	 * @throws Exception
 	 */
+	
 	public Render addFocus(@Read(key = "data") String data) throws Exception {
 
+		
 		System.out.println("-----------addFocus in Action---------");
 		int result = routerService.addFocus(data);
 		if(result == 0){
@@ -483,6 +486,7 @@ public class RouterAction extends BaseAction {
 	 * @return
 	 * @throws Exception 
 	 */
+	@Get(encode = "UTF-8")
 	public Render sendMassText(@Read(key = "data") String data) throws Exception{
 		String result = routerService.sendMassText(wxMpService, data);
 		return getRender(result);
@@ -495,8 +499,8 @@ public class RouterAction extends BaseAction {
 	 * @throws Exception 
 	 */
 	public Render sendMassNews(@Read(key = "type") int type) throws Exception{
+		
 		String result = routerService.sendMassNews(wxMpService, type);
 		return getRender(result);
-	}
-	
+	}		
 }
