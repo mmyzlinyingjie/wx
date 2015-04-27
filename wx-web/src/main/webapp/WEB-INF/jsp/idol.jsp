@@ -176,6 +176,6 @@ var idols =[]
 	</div>
 	<script type="text/javascript" src="../../wx/static/js/jquery-2.1.1.js"></script>
 	<script type="text/javascript" src="../../wx/static/js/idol.js"></script>
-	<script type="text/javascript" charset="utf-8" src="http://172.19.28.57:8132/livereload.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://172.19.28.57:8132/livereload.js"></script></body>
+
+</body>
 </html>

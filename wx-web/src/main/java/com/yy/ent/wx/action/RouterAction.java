@@ -47,7 +47,6 @@ public class RouterAction extends BaseAction {
 	private WxMpService wxMpService;
 	private WxMpMessageRouter wxMpMessageRouter;
 	private boolean setRouter = false;
-	private Long lastMsgId;
 
 	@Inject(instance = Image.class)
 	private Image image;
@@ -368,16 +367,7 @@ public class RouterAction extends BaseAction {
 		return getRender(proList);
 	}
 
-	/**
-	 * 图文信息（未使用）
-	 * 
-	 * @return
-	 * @throws WxErrorException
-	 */
-	public Render mass() throws WxErrorException {
-		routerService.massGroupMessageSend(wxMpService);
-		return getRender("success");
-	}
+
 
 	/**
 	 * 红队介绍页
@@ -431,10 +421,19 @@ public class RouterAction extends BaseAction {
 		return getForward("main.jsp");
 	}
 
+	/**
+	 * 重新设置路由
+	 */
 	public void reSetRouter() {
 		setRouter = false;
 	}
 
+	/**
+	 * 关注设置
+	 * @param code
+	 * @return
+	 * @throws WxErrorException
+	 */
 	public Forward setFocus(@Read(key = "code") String code)
 			throws WxErrorException {
 
@@ -445,18 +444,16 @@ public class RouterAction extends BaseAction {
 		return getForward("idol.jsp");
 	}
 	
-	public Forward setFocus2(@Read(key = "code") String code)
-			throws WxErrorException {
 
-		Map map = routerService.setFocus(wxMpService, code);
-		getRequest().getSession().setAttribute("fans_id", map.get("fans_id"));
-		getRequest().getSession().setAttribute("idol", map.get("idol"));
-		// return getForward("uploadImage-yingjie.jsp");
-		return getForward("uploadImage-yingjie.jsp");
-	}
-
+	/**
+	 * 添加关注
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
 	public Render addFocus(@Read(key = "data") String data) throws Exception {
 
+		System.out.println("-----------addFocus in Action---------");
 		int result = routerService.addFocus(data);
 		if(result == 0){
 			return getRenderFail("添加失败");
@@ -464,6 +461,12 @@ public class RouterAction extends BaseAction {
 		return getRender(result);
 	}
 
+	/**
+	 * 删除关注
+	 * @param data
+	 * @return
+	 * @throws WxErrorException
+	 */
 	public Render deleteFocus(@Read(key = "data") String data)
 			throws WxErrorException {
 
@@ -472,5 +475,28 @@ public class RouterAction extends BaseAction {
 			return getRenderFail("删除失败");
 		}
 		return getRender(result);
+	}				
+	
+	/**
+	 * 群发文本消息
+	 * @param data
+	 * @return
+	 * @throws Exception 
+	 */
+	public Render sendMassText(@Read(key = "data") String data) throws Exception{
+		String result = routerService.sendMassText(wxMpService, data);
+		return getRender(result);
 	}
+	
+	/**
+	 * 群发图文消息
+	 * @param data
+	 * @return
+	 * @throws Exception 
+	 */
+	public Render sendMassNews(@Read(key = "type") int type) throws Exception{
+		String result = routerService.sendMassNews(wxMpService, type);
+		return getRender(result);
+	}
+	
 }

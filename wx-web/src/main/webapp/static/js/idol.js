@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var domain = "http://172.19.28.57:8080"
+	var domain = "http://mynona.xicp.net"
 	$('#list')[0].addEventListener('touchend', function(e){
 		var e = e || window.event
 		, target = e.target;

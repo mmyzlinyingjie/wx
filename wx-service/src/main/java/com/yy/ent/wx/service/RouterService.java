@@ -25,15 +25,16 @@ import me.chanjar.weixin.mp.api.WxMpMessageHandler;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
-import me.chanjar.weixin.mp.bean.WxMpMassGroupMessage;
 import me.chanjar.weixin.mp.bean.WxMpMassNews;
-import me.chanjar.weixin.mp.bean.WxMpMassNews.WxMpMassNewsArticle;
+import me.chanjar.weixin.mp.bean.WxMpMassOpenIdsMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutImageMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutTextMessage;
 import me.chanjar.weixin.mp.bean.custombuilder.NewsBuilder;
+import me.chanjar.weixin.mp.bean.result.WxMpMassSendResult;
 import me.chanjar.weixin.mp.bean.result.WxMpMassUploadResult;
+import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -47,9 +48,11 @@ import com.yy.ent.cherroot.condition.DBCondition.OrderType;
 import com.yy.ent.commons.base.dto.Property;
 import com.yy.ent.commons.base.inject.Inject;
 import com.yy.ent.wx.common.constants.Constants;
+import com.yy.ent.wx.common.model.Fans;
 import com.yy.ent.wx.common.model.FansIdol;
 import com.yy.ent.wx.common.model.Image;
 import com.yy.ent.wx.common.model.LocalMedia;
+import com.yy.ent.wx.common.model.MassNews;
 import com.yy.ent.wx.common.model.News;
 import com.yy.ent.wx.common.model.Router;
 import com.yy.ent.wx.common.model.Text;
@@ -57,9 +60,11 @@ import com.yy.ent.wx.common.model.Video;
 import com.yy.ent.wx.common.model.Voice;
 import com.yy.ent.wx.common.model.Wx1931;
 import com.yy.ent.wx.common.util.MessageType;
+import com.yy.ent.wx.dao.FansDao;
 import com.yy.ent.wx.dao.FansIdolDao;
 import com.yy.ent.wx.dao.ImageDao;
 import com.yy.ent.wx.dao.LocalMediaDao;
+import com.yy.ent.wx.dao.MassNewsDao;
 import com.yy.ent.wx.dao.MultiDao;
 import com.yy.ent.wx.dao.NewsDao;
 import com.yy.ent.wx.dao.RouterDao;
@@ -68,6 +73,7 @@ import com.yy.ent.wx.dao.VideoDao;
 import com.yy.ent.wx.dao.VoiceDao;
 import com.yy.ent.wx.dao.Wx1931Dao;
 import com.yy.ent.wx.service.base.BaseService;
+
 
 public class RouterService extends BaseService {
 
@@ -102,10 +108,16 @@ public class RouterService extends BaseService {
 
 	@Inject(instance = LocalMediaDao.class)
 	protected LocalMediaDao localMediaDao;
-	
+
 	@Inject(instance = FansIdolDao.class)
 	protected FansIdolDao fansIdolDao;
+
+	@Inject(instance = FansDao.class)
+	protected FansDao fansDao;
 	
+	
+	@Inject(instance = MassNewsDao.class)
+	protected MassNewsDao massNewsDao;
 
 	/**
 	 * @param wxMpService
@@ -311,8 +323,10 @@ public class RouterService extends BaseService {
 
 		return wxMpMessageRouter.rule().async(false).content(intercept) // 拦截内容为“哈哈”的消息
 				.handler(handler).end();
-//		return wxMpMessageRouter.rule().async(false).rContent(intercept+"*")// 拦截内容为“哈哈”的消息
-//				.handler(handler).end();
+		// return
+		// wxMpMessageRouter.rule().async(false).rContent(intercept+"*")//
+		// 拦截内容为“哈哈”的消息
+		// .handler(handler).end();
 	}
 
 	/**
@@ -481,8 +495,9 @@ public class RouterService extends BaseService {
 	}
 
 	public int getRandomVideosByName(NewsBuilder nb, int type, String name) {
-		
-		List<Property> pros = multiDao.queryCollection("newVideo", name, name, name);
+
+		List<Property> pros = multiDao.queryCollection("newVideo", name, name,
+				name);
 		if (pros.size() > 10) {
 			int[] index = randomArray(0, pros.size() - 1, 10);
 			for (int i = 0; i < index.length; i++) {
@@ -493,8 +508,7 @@ public class RouterService extends BaseService {
 				item.setTitle(pro.get("title"));
 				item.setUrl(pro.get("url"));
 				nb = nb.addArticle(item);
-				
-				
+
 			}
 		} else {
 			for (Property pro : pros) {
@@ -506,7 +520,7 @@ public class RouterService extends BaseService {
 				nb = nb.addArticle(item);
 			}
 		}
-		System.out.println("///////////发送  "+ name+"  图文:" + pros.size());
+		System.out.println("///////////发送  " + name + "  图文:" + pros.size());
 		return pros.size();
 	}
 
@@ -533,7 +547,7 @@ public class RouterService extends BaseService {
 					.mediaId(pro.get("media_id")).build();
 			wxMpService.customMessageSend(message);
 		}
-		System.out.println("///////////发送  "+ name+"  图片:" + count);
+		System.out.println("///////////发送  " + name + "  图片:" + count);
 		return count;
 	}
 
@@ -550,7 +564,7 @@ public class RouterService extends BaseService {
 					.mediaId(pro.get("media_id")).build();
 			wxMpService.customMessageSend(message);
 		}
-		System.out.println("///////////发送  "+ name+"  语音:" + count);
+		System.out.println("///////////发送  " + name + "  语音:" + count);
 		return count;
 	}
 
@@ -561,84 +575,90 @@ public class RouterService extends BaseService {
 	 * @param inMessage
 	 * @param response
 	 * @return
-	 * @throws WxErrorException
 	 * @throws Exception
 	 */
-	public void dispose(
-			WxMpXmlMessage inMessage, WxMpService wxMpService)
-			throws WxErrorException {
+	public void dispose(WxMpXmlMessage inMessage, WxMpService wxMpService)
+			throws Exception {
 
-		WxMpCustomMessage message ;
+		WxMpCustomMessage message;
 		String msgType = inMessage.getMsgType();
 
 		// 对菜单事件的处理
 		if (msgType.equals("event")) {
 			System.out.println("-----------event-------------------");
 			String eventKey = inMessage.getEventKey();
-			if (eventKey.equals("白队")) {
-				NewsBuilder nb = WxMpCustomMessage.NEWS();
-				message = newNews(nb, 1).toUser(inMessage.getFromUserName()).build();
-				wxMpService.customMessageSend(message);
-
-			} else if (eventKey.equals("红队")) {
-				NewsBuilder nb = WxMpCustomMessage.NEWS();
-				message = newNews(nb, 2).toUser(inMessage.getFromUserName()).build();
-				wxMpService.customMessageSend(message);
-
-			} else if (eventKey.equals("caidan")) {
-
-				String contentText = "试试回复任意内容，比如:\n"
-						+ getEggshellContent(5) ;
-				message = WxMpCustomMessage.TEXT().content(contentText)
-						.toUser(inMessage.getFromUserName()).build();
-				wxMpService.customMessageSend(message);
-				
-			} else if (eventKey.equals("我们的歌")) {
-
-				// 发送图文消息
-				NewsBuilder nb = WxMpCustomMessage.NEWS();
-				message = newNews(nb, 3)
-						.toUser(inMessage.getFromUserName()).build();
-				wxMpService.customMessageSend(message);
-			}
-			else if (eventKey.equals("我的偶像")) {
-				
-				
-				System.out.println("============我的偶像==============");
-				//查询相关偶像关注表
-				List<Property> pros = multiDao.queryCollection("fans_idol_name", inMessage.getFromUserName());
-				if(pros == null || pros.size() == 0){
-					//回复引导关注信息
-					String contentText = "请在“关注设置”里面设置你喜欢的偶像，么么哒(｡◕ˇ∀ˇ◕)ﾉ";
-					message =  WxMpCustomMessage.TEXT().content(contentText)
+			if (eventKey != null) {
+				if (eventKey.equals("白队")) {
+					NewsBuilder nb = WxMpCustomMessage.NEWS();
+					message = newNews(nb, 1)
 							.toUser(inMessage.getFromUserName()).build();
 					wxMpService.customMessageSend(message);
-				}else{
-					//回复偶像信息
-					for(Property pro: pros){
-						
-						inMessage.setContent(pro.get("idol_name"));
-						disposeText(inMessage, wxMpService);
-//						inMessage.setContent(pro.get("nick_name"));
-//						disposeText(inMessage, wxMpService);
-					}
-				}
-				
-				//返回偶像信息
-			}else if (eventKey.equals("我们的歌")) {
 
-				// 发送图文消息
-				NewsBuilder nb = WxMpCustomMessage.NEWS();
-				message =  newNews(nb, 3)
-						.toUser(inMessage.getFromUserName()).build();
-				wxMpService.customMessageSend(message);
+				} else if (eventKey.equals("红队")) {
+					NewsBuilder nb = WxMpCustomMessage.NEWS();
+					message = newNews(nb, 2)
+							.toUser(inMessage.getFromUserName()).build();
+					wxMpService.customMessageSend(message);
+
+				} else if (eventKey.equals("caidan")) {
+
+					String contentText = "试试回复任意内容，比如:\n"
+							+ getEggshellContent(5);
+					message = WxMpCustomMessage.TEXT().content(contentText)
+							.toUser(inMessage.getFromUserName()).build();
+					wxMpService.customMessageSend(message);
+
+				} else if (eventKey.equals("我们的歌")) {
+
+					// 发送图文消息
+					NewsBuilder nb = WxMpCustomMessage.NEWS();
+					message = newNews(nb, 3)
+							.toUser(inMessage.getFromUserName()).build();
+					wxMpService.customMessageSend(message);
+				} else if (eventKey.equals("我的偶像")) {
+
+					System.out.println("============我的偶像==============");
+					// 查询相关偶像关注表
+					List<Property> pros = multiDao.queryCollection(
+							"fans_idol_name", inMessage.getFromUserName());
+					if (pros == null || pros.size() == 0) {
+						// 回复引导关注信息
+						String contentText = "请在“关注设置”里面设置你喜欢的偶像，么么哒(｡◕ˇ∀ˇ◕)ﾉ";
+						message = WxMpCustomMessage.TEXT().content(contentText)
+								.toUser(inMessage.getFromUserName()).build();
+						wxMpService.customMessageSend(message);
+					} else {
+						// 回复偶像信息
+						for (Property pro : pros) {
+
+							inMessage.setContent(pro.get("idol_name"));
+							disposeText(inMessage, wxMpService);
+							// inMessage.setContent(pro.get("nick_name"));
+							// disposeText(inMessage, wxMpService);
+						}
+					}
+
+					// 返回偶像信息
+				} else if (eventKey.equals("我们的歌")) {
+
+					// 发送图文消息
+					NewsBuilder nb = WxMpCustomMessage.NEWS();
+					message = newNews(nb, 3)
+							.toUser(inMessage.getFromUserName()).build();
+					wxMpService.customMessageSend(message);
+				}
 			}
-			//给新用户的回复
-			if(inMessage.getEvent().equals("subscribe")){
+			// 给新用户的回复
+			if (inMessage.getEvent().equals("subscribe")) {
 				String content = "欢迎关注1931粉丝团，么么哒!";
-				message = WxMpCustomMessage.TEXT().toUser(inMessage.getFromUserName())
-						.content(content).build();
+				message = WxMpCustomMessage.TEXT()
+						.toUser(inMessage.getFromUserName()).content(content)
+						.build();
 				wxMpService.customMessageSend(message);
+				// 保存openid
+				Fans fans = new Fans();
+				fans.setFansId(inMessage.getFromUserName());
+				fansDao.insert(fans);
 			}
 		}
 		// 对语音事件的处理
@@ -682,7 +702,7 @@ public class RouterService extends BaseService {
 		if (msgType.equals("image")) {
 
 			String contentText = "试回复:\n" + getEggshellContent(3);
-			message =  WxMpCustomMessage.TEXT().content(contentText)
+			message = WxMpCustomMessage.TEXT().content(contentText)
 					.toUser(inMessage.getFromUserName()).build();
 			wxMpService.customMessageSend(message);
 		}
@@ -702,21 +722,20 @@ public class RouterService extends BaseService {
 
 	}
 
-	
-	public void disposeText(
-			WxMpXmlMessage inMessage, WxMpService wxMpService)
+	public void disposeText(WxMpXmlMessage inMessage, WxMpService wxMpService)
 			throws WxErrorException {
-		
-		WxMpCustomMessage message ;
-		String content = inMessage.getContent();
-		int count = 0;
-		
 
-		me.chanjar.weixin.mp.bean.custombuilder.NewsBuilder nb = WxMpCustomMessage.NEWS();
+		WxMpCustomMessage message;
+		String content = inMessage.getContent().replace(" ", "");
+		int count = 0;
+
+		me.chanjar.weixin.mp.bean.custombuilder.NewsBuilder nb = WxMpCustomMessage
+				.NEWS();
 		count += getRandomVideosByName(nb, 4, content);
 		message = nb.toUser(inMessage.getFromUserName()).build();
-		wxMpService.customMessageSend(message);
-		
+		if (count != 0)
+			wxMpService.customMessageSend(message);
+
 		count += getImageByName(inMessage.getFromUserName(), content,
 				wxMpService);
 
@@ -747,46 +766,6 @@ public class RouterService extends BaseService {
 		db.addOrder("sortord", OrderType.ASC);
 		List<Wx1931> list = wx1931Dao.query(db);
 		return list;
-	}
-
-	/**
-	 * 群发接口（未使用）
-	 * 
-	 * @param wxMpService
-	 * @throws WxErrorException
-	 */
-	public void massGroupMessageSend(WxMpService wxMpService)
-			throws WxErrorException {
-		WxMpMassGroupMessage message = new WxMpMassGroupMessage();
-		message.setMsgtype(WxConsts.MASS_MSG_NEWS);
-		message.setContent("消息描述");
-		message.setMediaId("VSrTjv0ET7b_N6wvbAeT-kQ4eXC4VNL6b0Q7_zJKv1vCs7hylLDWdfbi8E8m8yoG");
-		wxMpService.massGroupMessageSend(message);
-	}
-
-	/**
-	 * 群发图文上传接口 （未使用）
-	 * 
-	 * @param wxMpService
-	 * @return
-	 * @throws WxErrorException
-	 */
-	public WxMpMassUploadResult massNewsUpload(WxMpService wxMpService)
-			throws WxErrorException {
-
-		WxMpMassNewsArticle article = new WxMpMassNewsArticle();
-		article.setAuthor("yingjie");
-		article.setContent("content");
-		article.setContentSourceUrl("http://www.baidu.com");
-		article.setDigest("digest");
-		article.setShowCoverPic(true);
-		article.setTitle("title");
-		article.setThumbMediaId("7MZopX2YXSxDzLqiSIuBlQYysFStWOTBTN9FfCHq0GdbOmdDB2V6hgVVPyAmUZz-");
-
-		WxMpMassNews massNews = new WxMpMassNews();
-		massNews.addArticle(article);
-
-		return wxMpService.massNewsUpload(massNews);
 	}
 
 	/**
@@ -1147,7 +1126,7 @@ public class RouterService extends BaseService {
 			for (int i = 0; i < voicesIndex.length; i++) {
 				Property pro = voices.get(voicesIndex[i]);
 				if (pro != null)
-					voiceContent += pro.get("description") ;
+					voiceContent += pro.get("description");
 			}
 		}
 
@@ -1161,21 +1140,25 @@ public class RouterService extends BaseService {
 					newContent += pro.get("description") + "\n";
 			}
 		}
-		return newContent + imageContent + voiceContent ;
+		return newContent + imageContent + voiceContent;
 	}
 
-	public Map setFocus(WxMpService wxMpService, String code) throws WxErrorException {
-		
-//		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
-//		wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
-//		String openId = wxMpOAuth2AccessToken.getOpenId();
-		String openId = "toD6flsi1L6NDiryqefCalDF1k6XE";
+	public Map setFocus(WxMpService wxMpService, String code)
+			throws WxErrorException {
+
+		System.out.println("before------------------");
+/*		WxMpOAuth2AccessToken wxMpOAuth2AccessToken;
+		wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+		String openId = wxMpOAuth2AccessToken.getOpenId();*/
+//		System.out.println("openId ------------------------"+ openId);
+		 String openId = "test_openId";
 		List<Property> pros = multiDao.queryCollection("fans_idol", openId);
-//		List<Integer> list = new ArrayList<Integer>();
-//		for(Property pro: pros){
-//			System.out.println(pro.get("idol_id"));
-//			System.out.println(pro.get("idol_name"));
-//		}
+		// List<Integer> list = new ArrayList<Integer>();
+		// for(Property pro: pros){
+		// System.out.println(pro.get("idol_id"));
+		// System.out.println(pro.get("idol_name"));
+		// }
+		System.out.println("after-----------------");
 		Map map = new HashMap();
 		map.put("fans_id", openId);
 		map.put("idol", pros);
@@ -1183,7 +1166,8 @@ public class RouterService extends BaseService {
 	}
 
 	public int addFocus(String jsonData) throws Exception {
-		
+
+		System.out.println("-----------addFoucs-----------");
 		System.out.println(jsonData);
 		JSONObject jo = JSON.parseObject(jsonData);
 		String fans_id = (String) jo.get("fans_id");
@@ -1191,19 +1175,19 @@ public class RouterService extends BaseService {
 		FansIdol fansIdol = new FansIdol();
 		fansIdol.setFans_id(fans_id);
 		fansIdol.setIdol_id(Integer.valueOf(idol_id));
-		
+
 		DBCondition db = new DBCondition();
 		db.addCondition("fans_id", fans_id);
 		db.addCondition("idol_id", idol_id);
 		List<FansIdol> list = fansIdolDao.query(db);
-		if(list == null || list.size() == 0){
+		if (list == null || list.size() == 0) {
 			return fansIdolDao.insert(fansIdol);
 		}
 		return 0;
 	}
 
 	public int deleteFocus(String jsonData) {
-		
+
 		System.out.println(jsonData);
 		JSONObject jo = JSON.parseObject(jsonData);
 		String fans_id = (String) jo.get("fans_id");
@@ -1212,4 +1196,93 @@ public class RouterService extends BaseService {
 		return multiDao.delete("delete_fans_idol", fans_id, idol_id);
 	}
 
+	public List<Fans> getFansId() throws Exception {
+
+		DBCondition db = new DBCondition();
+		return fansDao.query(db);
+	}
+
+	public String sendMassText(WxMpService wxMpService, String data)
+			throws Exception {
+
+		WxMpMassOpenIdsMessage massMessage = new WxMpMassOpenIdsMessage();
+		massMessage.setMsgType(WxConsts.MASS_MSG_TEXT);
+		massMessage.setContent("消息内容");
+		// 最多支持10,000个群发用户
+		List<String> listFansStr = massMessage.getToUsers();
+		List<Fans> listFan = getFansId();
+		for (Fans fans : listFan) {
+			listFansStr.add(fans.getFansId());
+		}
+
+		return wxMpService.massOpenIdsMessageSend(massMessage).toString();
+	}
+	
+	public void addMassArticle(WxMpMassNews news, int type) throws Exception{
+		
+		DBCondition db = new DBCondition();
+		db.addCondition("type", type);
+		db.addOrder("sortord", OrderType.ASC);
+		List<MassNews> lists = massNewsDao.query(db);
+		for(MassNews mnews :lists){
+			WxMpMassNews.WxMpMassNewsArticle article = new WxMpMassNews.WxMpMassNewsArticle();
+			article.setTitle(mnews.getTitle());
+			article.setContent(mnews.getContent());
+			article.setThumbMediaId(mnews.getThumbMediaId());
+			article.setShowCoverPic(mnews.isShowCoverPic());
+			article.setAuthor(mnews.getAuthor());
+			article.setContentSourceUrl(mnews.getContentSourceUrl());
+			article.setDigest(mnews.getDigest());
+			news.addArticle(article);
+		}
+	}
+
+	public String sendMassNews(WxMpService wxMpService, int type) throws Exception {
+
+		WxMpMassNews news = new WxMpMassNews();
+		addMassArticle(news, type);
+		WxMpMassUploadResult massUploadResult = wxMpService.massNewsUpload(news);
+		WxMpMassOpenIdsMessage massMessage = new WxMpMassOpenIdsMessage();
+		massMessage.setMsgType(WxConsts.MASS_MSG_NEWS);
+		massMessage.setMediaId(massUploadResult.getMediaId());
+		
+		// 最多支持10,000个群发用户
+		List<String> listFansStr = massMessage.getToUsers();
+		List<Fans> listFan = getFansId();
+		for (Fans fans : listFan) {
+			listFansStr.add(fans.getFansId());
+		}
+
+		WxMpMassSendResult massResult = wxMpService.massOpenIdsMessageSend(massMessage);
+		return massResult.getErrorMsg();
+	}
+	
+	
+	public NewsBuilder getMassNews(NewsBuilder nb, int type) {
+
+		DBCondition db = new DBCondition();
+		db.addCondition("type", type);
+		db.addOrder("sortord", OrderType.ASC);
+		List<MassNews> list = null;
+		try {
+			list = massNewsDao.query(db);
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+
+		int count = 0;
+		for (MassNews news : list) {
+			WxMpCustomMessage.WxArticle item = new WxMpCustomMessage.WxArticle();
+			item.setDescription(news.getContent());
+			item.setPicUrl(news.getThumbMediaId());
+			item.setTitle(news.getTitle());
+			item.setUrl(news.getContentSourceUrl());
+			nb = nb.addArticle(item);
+			count++;
+			if (count > 9)
+				break;
+		}
+		return nb;
+	}
 }
