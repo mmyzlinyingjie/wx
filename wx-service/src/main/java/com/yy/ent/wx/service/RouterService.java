@@ -483,6 +483,8 @@ public class RouterService extends BaseService {
 			if (type == 4) {
 				item.setUrl("http://mynona.xicp.net/wx/video.jsp?url="
 						+ news.getUrl());
+				System.out.println("---------------------");
+				System.out.println(item.getUrl());
 			} else {
 				item.setUrl(news.getUrl());
 			}
@@ -506,7 +508,7 @@ public class RouterService extends BaseService {
 				item.setDescription(pro.get("description"));
 				item.setPicUrl(pro.get("picUrl"));
 				item.setTitle(pro.get("title"));
-				item.setUrl(pro.get("url"));
+				item.setUrl("http://mynona.xicp.net/wx/video.jsp?url=" + pro.get("url"));
 				nb = nb.addArticle(item);
 
 			}
@@ -516,7 +518,7 @@ public class RouterService extends BaseService {
 				item.setDescription(pro.get("description"));
 				item.setPicUrl(pro.get("picUrl"));
 				item.setTitle(pro.get("title"));
-				item.setUrl(pro.get("url"));
+				item.setUrl("http://mynona.xicp.net/wx/video.jsp?url=" + pro.get("url"));
 				nb = nb.addArticle(item);
 			}
 		}
