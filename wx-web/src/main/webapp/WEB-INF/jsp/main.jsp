@@ -14,9 +14,9 @@
 	<div class="bd">
 		<section class="side">
 			<ul>
-				<li><a href="http://localhost:8080/wx/getRouterList.action" name="menu" target="content"/>路由管理</li>
-				<li><a href="http://localhost:8080/wx/getTextList.action" name="menu" target="content"/>文本回复管理</li>
-				<li><a href="http://localhost:8080/wx/getImageList.action" name="menu" target="content"/>图片管理</li>
+				<li><a href="http://mynona.xicp.net/wx/getRouterList.action" name="menu" target="content"/>路由管理</li>
+				<li><a href="http://mynona.xicp.net/wx/getTextList.action" name="menu" target="content"/>文本回复管理</li>
+				<li><a href="http://mynona.xicp.net/wx/getImageList.action" name="menu" target="content"/>图片管理</li>
 			</ul>
 		</section>
 		<section class="main">
